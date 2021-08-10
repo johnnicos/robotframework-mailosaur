@@ -1,5 +1,3 @@
-# python3.8
-
 from os import tcgetpgrp
 from mailosaur import MailosaurClient, mailosaur_client
 from mailosaur.models import SearchCriteria
