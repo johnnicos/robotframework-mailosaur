@@ -11,6 +11,7 @@ from robot.api import logger
 class rfmailosaur:
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
     ROBOT_LIBRARY_VERSION = '0.1'
+    ROBOT_AUTO_KEYWORDS = False
 
     def __init__(self, API_KEY, server_id, server_domain) -> None:
         self.mailosaur = MailosaurClient(API_KEY)
