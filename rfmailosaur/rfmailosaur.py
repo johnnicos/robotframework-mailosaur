@@ -1,6 +1,7 @@
 from mailosaur import MailosaurClient
 from mailosaur.models import SearchCriteria
 from robot.api.deco import keyword, library
+from robot.api import logger
 
 
 @library
@@ -114,11 +115,14 @@ class rfmailosaur:
         assert any(map(lambda link: text in link, links))
 
     @keyword
-    def email_sender_should_be(self, matcher: str):
+    def email_sender_should_match(self, matcher: str):
+        """
+        Checks that last email sender matches the given matcher.
+        """
         self.criteria.sent_to = self.server_domain
         last_email = self.mailosaur.messages.get(
             self.server_id, self.criteria)
-        sender = last_email.sender
+        sender = last_email.sender[0].email
         try:
             assert sender == matcher
         except AssertionError as e:
