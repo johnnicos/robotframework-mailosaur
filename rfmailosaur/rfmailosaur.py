@@ -20,13 +20,27 @@ class rfmailosaur:
     @keyword
     def email_subject_should_match(self, matcher: str):
         """
+        Checks the email subject of the last email received on the current server_domain matches the matcher.
         """
         self.criteria.sent_to = self.server_domain
         last_email = self.mailosaur.messages.get(self.server_id, self.criteria)
         try:
             assert last_email.subject == matcher
         except AssertionError as e:
-            raise Exception("AssertionError: {0} does not equal {1}".format(
+            raise Exception("AssertionError: '{0}' does not equal '{1}'".format(
+                last_email.subject, matcher))
+
+    @keyword
+    def email_subject_should_contain(self, matcher: str):
+        """
+        Checks the email subject of the last email received on the current server_domain contains the matcher.
+        """
+        self.criteria.sent_to = self.server_domain
+        last_email = self.mailosaur.messages.get(self.server_id, self.criteria)
+        try:
+            assert matcher in last_email.subject
+        except AssertionError as e:
+            raise Exception("AssertionError: '{0}' does not contain '{1}'".format(
                 last_email.subject, matcher))
 
     @keyword
@@ -43,6 +57,7 @@ class rfmailosaur:
     @keyword
     def email_should_have_links(self, links_number: int):
         """
+        Checks the last email contains X number of links where X == links_number.
         """
         self.criteria.sent_to = self.server_domain
         last_email = self.mailosaur.messages.get(
@@ -57,6 +72,7 @@ class rfmailosaur:
     @keyword
     def email_should_have_attachments(self, attachments_number: int):
         """
+        Checks the last email contains X number of attachments where X == attachments_number.
         """
         self.criteria.sent_to = self.server_domain
         last_email = self.mailosaur.messages.get(
@@ -67,3 +83,46 @@ class rfmailosaur:
         except AssertionError as e:
             raise Exception("AssertionError: {0} does not equal {1}".format(
                 attachments, attachments_number))
+
+    @keyword
+    def email_body_should_contain(self, matcher, case_insensitive: bool):
+        """
+        Checks the last email's body contains a specific string (matcher).
+
+        If case_insensitive is set to True, then case is not checked in the substring.
+        """
+        self.criteria.sent_to = self.server_domain
+        last_email = self.mailosaur.messages.get(
+            self.server_id, self.criteria)
+        text = last_email.text.body
+        if case_insensitive:
+            text = text.lower()
+            matcher = matcher.lower()
+        try:
+            assert matcher in text
+        except AssertionError as e:
+            raise Exception("AssertionError: {0} is not contained {1}".format(
+                matcher, text))
+
+    @keyword
+    def email_links_should_contain_text(self, text: str):
+        """
+        Checks if atleast one of the links contained in the last email contains text.
+        """
+        self.criteria.sent_to = self.server_domain
+        last_email = self.mailosaur.messages.get(
+            self.server_id, self.criteria)
+        links = [link.text for link in last_email.text.links]
+        assert any(map(lambda link: text in link, links))
+
+    @keyword
+    def email_sender_should_be(self, matcher: str):
+        self.criteria.sent_to = self.server_domain
+        last_email = self.mailosaur.messages.get(
+            self.server_id, self.criteria)
+        sender = last_email.sender
+        try:
+            assert sender == matcher
+        except AssertionError as e:
+            raise Exception("AssertionError: '{0}' does not match sender '{1}'".format(
+                matcher, sender))
