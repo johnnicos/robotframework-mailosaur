@@ -1,8 +1,6 @@
-from os import tcgetpgrp
-from mailosaur import MailosaurClient, mailosaur_client
+from mailosaur import MailosaurClient
 from mailosaur.models import SearchCriteria
 from robot.api.deco import keyword, library
-from robot.api import logger
 
 
 @library
