@@ -1,5 +1,7 @@
 # robotframework-mailosaur
 
+[![Upload Python Package](https://github.com/primait/robotframework-mailosaur/actions/workflows/publish.yml/badge.svg)](https://github.com/primait/robotframework-mailosaur/actions/workflows/publish.yml)
+
 robotframework-mailosaur is a library wrapper that helps robotframework users to test emails in a more stable and easy way.
 
 robotframework-mailosaur is a wrapper for mailosaur, which means that to use this library you must have a [mailosaur working account](https://mailosaur.com/).
