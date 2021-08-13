@@ -5,12 +5,23 @@ from robot.api import logger
 
 
 @library
-class rfmailosaur:
+class RFMailosaur:
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
     ROBOT_LIBRARY_VERSION = '0.1'
     ROBOT_AUTO_KEYWORDS = False
 
     def __init__(self, API_KEY, server_id, server_domain) -> None:
+        """
+        The library needs a few arguments in order to work properly:
+
+        - API_KEY which you can retrieve from your mailosaur dashboard
+
+        - server_id which you can retrieve from your mailosaur dashboard
+
+        - server_domain which you can retrieve from your mailosaur dashboard
+
+        Set these arguments when importing the library in the .robot file or set a __init__.robot file with the import and parameters.
+        """
         self.mailosaur = MailosaurClient(API_KEY)
         self.server_id = server_id
         self.server_domain = server_domain
@@ -115,7 +126,7 @@ class rfmailosaur:
         assert any(map(lambda link: text in link, links))
 
     @keyword
-    def email_sender_should_match(self, matcher: str):
+    def email_sender_should_be(self, matcher: str):
         """
         Checks that last email sender matches the given matcher.
         """
