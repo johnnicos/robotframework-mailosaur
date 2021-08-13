@@ -1,3 +1,4 @@
+import re
 from mailosaur import MailosaurClient
 from mailosaur.models import SearchCriteria
 from robot.api.deco import keyword, library
@@ -5,29 +6,39 @@ from robot.api import logger
 
 
 @library
-class rfmailosaur:
+class RFMailosaur:
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
     ROBOT_LIBRARY_VERSION = '0.1'
     ROBOT_AUTO_KEYWORDS = False
 
     def __init__(self, API_KEY, server_id, server_domain) -> None:
+        """
+        The library needs a few arguments in order to work properly:
+
+        - API_KEY which you can retrieve from your mailosaur dashboard
+
+        - server_id which you can retrieve from your mailosaur dashboard
+
+        - server_domain which you can retrieve from your mailosaur dashboard
+
+        Set these arguments when importing the library in the .robot file or set a __init__.robot file with the import and parameters.
+        """
         self.mailosaur = MailosaurClient(API_KEY)
         self.server_id = server_id
         self.server_domain = server_domain
         self.criteria = SearchCriteria()
 
     @keyword
-    def email_subject_should_match(self, matcher: str):
+    def email_subject_should_match(self, regex: str):
         """
-        Checks the email subject of the last email received on the current server_domain matches the matcher.
+        Checks the email subject of the last email received on the current server_domain matches the given regular expression.
         """
         self.criteria.sent_to = self.server_domain
         last_email = self.mailosaur.messages.get(self.server_id, self.criteria)
-        try:
-            assert last_email.subject == matcher
-        except AssertionError as e:
-            raise Exception("AssertionError: '{0}' does not equal '{1}'".format(
-                last_email.subject, matcher))
+        check = bool(re.match(r'{}'.format(regex), last_email.subject))
+        if check is False:
+            raise Exception(
+                "The regexp does not match {}".format(last_email.subject))
 
     @keyword
     def email_subject_should_contain(self, matcher: str):
@@ -115,7 +126,7 @@ class rfmailosaur:
         assert any(map(lambda link: text in link, links))
 
     @keyword
-    def email_sender_should_match(self, matcher: str):
+    def email_sender_should_be(self, matcher: str):
         """
         Checks that last email sender matches the given matcher.
         """
