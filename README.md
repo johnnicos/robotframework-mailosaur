@@ -2,18 +2,14 @@
 
 robotframework-mailosaur is a library wrapper that helps robotframework users to test emails in a more stable and easy way.
 
+robotframework-mailosaur is a wrapper for mailosaur, which means that to use this library you must have a [mailosaur working account](https://mailosaur.com/).
+
 ## Install robotframework-mailosaur
 
 Install robotframework-mailosaur:
 
 ```bash
 pip install robotframework-mailosaur
-```
-
-Install dependencies:
-
-```bash
-pip install -r requirements.txt
 ```
 
 ## How to use 
@@ -30,6 +26,3 @@ You're ready to go! 🎉
 
 robotframework-mailosaur has a keyword documentation which can be found inside the `docs` folder.
 
-## Additional notes
-
-robotframework-mailosaur is a wrapper for mailosaur, which means that to use this library you must have a [mailosaur working account](https://mailosaur.com/).
