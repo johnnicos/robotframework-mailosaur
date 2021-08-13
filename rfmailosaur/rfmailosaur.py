@@ -1,3 +1,4 @@
+import re
 from mailosaur import MailosaurClient
 from mailosaur.models import SearchCriteria
 from robot.api.deco import keyword, library
@@ -28,17 +29,16 @@ class RFMailosaur:
         self.criteria = SearchCriteria()
 
     @keyword
-    def email_subject_should_match(self, matcher: str):
+    def email_subject_should_match(self, regex: str):
         """
-        Checks the email subject of the last email received on the current server_domain matches the matcher.
+        Checks the email subject of the last email received on the current server_domain matches the given regular expression.
         """
         self.criteria.sent_to = self.server_domain
         last_email = self.mailosaur.messages.get(self.server_id, self.criteria)
-        try:
-            assert last_email.subject == matcher
-        except AssertionError as e:
-            raise Exception("AssertionError: '{0}' does not equal '{1}'".format(
-                last_email.subject, matcher))
+        check = bool(re.match(r'{}'.format(regex), last_email.subject))
+        if check is False:
+            raise Exception(
+                "The regexp does not match {}".format(last_email.subject))
 
     @keyword
     def email_subject_should_contain(self, matcher: str):
