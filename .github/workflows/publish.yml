@@ -1,5 +1,21 @@
-- name: Publish to PyPI
-  uses: pypa/gh-action-pypi-publish@release/v1
-  with:
-    user: __token__
-    password: ${{ secrets.PYPI_PASSWORD }}
+name: Upload Python Package
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@master
+    - name: Publish Python Package
+      uses: mariamrf/py-package-publish-action@v1.0.0
+      with:
+        python_version: '3.8.0'
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
