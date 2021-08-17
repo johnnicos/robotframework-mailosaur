@@ -4,7 +4,6 @@ Library           Browser
 
 *** Test Cases ***
 Test email subject
-    ## inserire match su regexp
     email subject should match    regex=[a-zA-Z0-9]
 
 Test email links
