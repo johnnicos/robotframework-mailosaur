@@ -18,8 +18,9 @@ Test email body text
 Test email links text
     email links should contain text    text=nasa
     email links should contain text    text=tesla
-# Delete mails
-#    delete all emails
+
+Delete mails
+    delete all emails
 
 Test email subject
     email subject should contain    matcher=Pa
