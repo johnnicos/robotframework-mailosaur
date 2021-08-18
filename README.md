@@ -27,4 +27,3 @@ You're ready to go! 🎉
 ## Keyword documentation
 
 robotframework-mailosaur has a keyword documentation which can be found inside the `docs` folder.
-
