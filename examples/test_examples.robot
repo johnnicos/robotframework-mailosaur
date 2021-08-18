@@ -1,5 +1,5 @@
 *** Settings ***
-Library           ../rfmailosaur/RFMailosaur.py    API_KEY=flqsMTAbtpXvAltI    server_id=fr537ggd    server_domain=fr537ggd.mailosaur.net
+Library           rfmailosaur    API_KEY=${api_key}    server_id=${server_id}    server_domain=${server_domain}
 Library           Browser
 
 *** Test Cases ***
@@ -7,13 +7,14 @@ Test email subject
     email subject should match    regex=[a-zA-Z0-9]
 
 Test email links
-    email_should_have_links    2
+    email should have links    2
 
 Test email attachments number
     email should have attachments    0
 
 Test email body text
-    email body should contain    matcher=tracciando    case_insensitive=true
+    ### pippo paperino pluto
+    email body should contain    matcher=pluto    case_insensitive=true
 
 Test email links text
     email links should contain text    text=nasa
