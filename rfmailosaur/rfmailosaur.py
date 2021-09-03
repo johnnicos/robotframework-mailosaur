@@ -5,11 +5,8 @@ from robot.api.deco import keyword, library
 from robot.api import logger
 
 
-@library
-class RFMailosaur:
+class rfmailosaur:
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
-    ROBOT_LIBRARY_VERSION = '0.1'
-    ROBOT_AUTO_KEYWORDS = False
 
     def __init__(self, API_KEY, server_id, server_domain) -> None:
         """
@@ -28,7 +25,6 @@ class RFMailosaur:
         self.server_domain = server_domain
         self.criteria = SearchCriteria()
 
-    @keyword
     def email_subject_should_match(self, regex: str):
         """
         Checks the email subject of the last email received on the current server_domain matches the given regular expression.
@@ -40,7 +36,6 @@ class RFMailosaur:
             raise Exception(
                 "The regexp does not match {}".format(last_email.subject))
 
-    @keyword
     def email_subject_should_contain(self, matcher: str):
         """
         Checks the email subject of the last email received on the current server_domain contains the matcher.
@@ -53,7 +48,6 @@ class RFMailosaur:
             raise Exception("AssertionError: '{0}' does not contain '{1}'".format(
                 last_email.subject, matcher))
 
-    @keyword
     def delete_all_emails(self):
         """
         deletes all emails contained in the currently selected server domain.
@@ -64,7 +58,6 @@ class RFMailosaur:
         except Exception as e:
             raise e
 
-    @keyword
     def email_should_have_links(self, links_number: int):
         """
         Checks the last email contains X number of links where X == links_number.
@@ -79,7 +72,6 @@ class RFMailosaur:
             raise Exception("AssertionError: {0} does not equal {1}".format(
                 links, links_number))
 
-    @keyword
     def email_should_have_attachments(self, attachments_number: int):
         """
         Checks the last email contains X number of attachments where X == attachments_number.
@@ -94,7 +86,6 @@ class RFMailosaur:
             raise Exception("AssertionError: {0} does not equal {1}".format(
                 attachments, attachments_number))
 
-    @keyword
     def email_body_should_contain(self, matcher, case_insensitive: bool):
         """
         Checks the last email's body contains a specific string (matcher).
@@ -114,7 +105,6 @@ class RFMailosaur:
             raise Exception("AssertionError: {0} is not contained {1}".format(
                 matcher, text))
 
-    @keyword
     def email_links_should_contain_text(self, text: str):
         """
         Checks if atleast one of the links contained in the last email contains text.
@@ -125,7 +115,6 @@ class RFMailosaur:
         links = [link.text for link in last_email.text.links]
         assert any(map(lambda link: text in link, links))
 
-    @keyword
     def email_sender_should_be(self, matcher: str):
         """
         Checks that last email sender matches the given matcher.
