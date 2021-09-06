@@ -118,6 +118,7 @@ class keywords(object):
             self.server_id, self.criteria)
         html = last_email.html.body
         if case_insensitive is True:
+            html = html.lower()
             matcher = matcher.lower()
         try:
             assert matcher in html
