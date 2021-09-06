@@ -76,7 +76,7 @@ class keywords(object):
         last_email = self.mailosaur.messages.get(
             self.server_id, self.criteria)
         text = last_email.text.body
-        if case_insensitive:
+        if case_insensitive is True:
             text = text.lower()
             matcher = matcher.lower()
         try:
@@ -108,3 +108,20 @@ class keywords(object):
         except AssertionError as e:
             raise Exception("AssertionError: '{0}' does not match sender '{1}'".format(
                 matcher, sender))
+
+    def html_content_should_contain_text(self, matcher: str, case_insensitive):
+        """
+        Checks that last email's HTML content contains sub-string
+        """
+        self.criteria.sent_to = self.server_domain
+        last_email = self.mailosaur.messages.get(
+            self.server_id, self.criteria)
+        html = last_email.html.body
+        if case_insensitive is True:
+            matcher = matcher.lower()
+        try:
+            assert matcher in html
+        except AssertionError as e:
+            logger.error(last_email.html.body)
+            raise Exception("AssertionError: '{0}' is not contained in '{1}'".format(
+                matcher, html))
