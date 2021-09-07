@@ -11,7 +11,7 @@ class keywords(object):
         """
         self.criteria.sent_to = self.server_domain
         last_email = self.mailosaur.messages.get(self.server_id, self.criteria)
-        if len(message) > 0:
+        if message is not None:
             last_email = message
         check = bool(re.match(r'{}'.format(regex), last_email.subject))
         if check is False:
@@ -24,7 +24,7 @@ class keywords(object):
         """
         self.criteria.sent_to = self.server_domain
         last_email = self.mailosaur.messages.get(self.server_id, self.criteria)
-        if len(message) > 0:
+        if message is not None:
             last_email = message
         try:
             assert matcher in last_email.subject
@@ -49,7 +49,7 @@ class keywords(object):
         self.criteria.sent_to = self.server_domain
         last_email = self.mailosaur.messages.get(
             self.server_id, self.criteria)
-        if len(message) > 0:
+        if message is not None:
             last_email = message
         links = len(last_email.html.links)
         try:
@@ -65,7 +65,7 @@ class keywords(object):
         self.criteria.sent_to = self.server_domain
         last_email = self.mailosaur.messages.get(
             self.server_id, self.criteria)
-        if len(message) > 0:
+        if message is not None:
             last_email = message
         attachments = len(last_email.attachments)
         try:
@@ -83,7 +83,7 @@ class keywords(object):
         self.criteria.sent_to = self.server_domain
         last_email = self.mailosaur.messages.get(
             self.server_id, self.criteria)
-        if len(message) > 0:
+        if message is not None:
             last_email = message
         text = last_email.text.body
         if case_insensitive is True:
@@ -102,7 +102,7 @@ class keywords(object):
         self.criteria.sent_to = self.server_domain
         last_email = self.mailosaur.messages.get(
             self.server_id, self.criteria)
-        if len(message) > 0:
+        if message is not None:
             last_email = message
         links = [link.text for link in last_email.text.links]
         assert any(map(lambda link: text in link, links))
@@ -114,7 +114,7 @@ class keywords(object):
         self.criteria.sent_to = self.server_domain
         last_email = self.mailosaur.messages.get(
             self.server_id, self.criteria)
-        if len(message) > 0:
+        if message is not None:
             last_email = message
         sender = last_email.sender[0].email
         try:
@@ -130,7 +130,7 @@ class keywords(object):
         self.criteria.sent_to = self.server_domain
         last_email = self.mailosaur.messages.get(
             self.server_id, self.criteria)
-        if len(message) > 0:
+        if message is not None:
             last_email = message
         html = last_email.html.body
         if case_insensitive is True:
@@ -152,9 +152,42 @@ class keywords(object):
 
     def get_last_email(self):
         """
-        Returns last email message
+        Returns last email message.
+
+        Note: this keyword returns a 'MessageSummary' object which does not include several properties. 
+        To get a more complete message, please use 'get email' keywords.
         """
         self.criteria.sent_to = self.server_domain
         results = self.mailosaur.messages.list(self.server_id)
         last_email = results.items[0]
         return last_email
+
+    def get_email_by_sender(self, sender, timeout=10000):
+        """
+        Waits for a message to be found. Returns as soon as a message matching the specified search criteria is found.
+        timeout: Specify how long to wait for a matching result (in milliseconds, default value is 10 seconds).
+        """
+        self.criteria.sent_from = sender
+        message = self.mailosaur.messages.get(
+            self.server_id, self.criteria, timeout=timeout)
+        return message
+
+    def get_email_by_subject(self, subject, timeout=10000):
+        """
+        Waits for a message to be found. Returns as soon as a message matching the specified search criteria is found.
+        timeout: Specify how long to wait for a matching result (in milliseconds, default value is 10 seconds).
+        """
+        self.criteria.subject = subject
+        message = self.mailosaur.messages.get(
+            self.server_id, self.criteria, timeout=timeout)
+        return message
+
+    def get_email_by_body(self, body, timeout=10000):
+        """
+        Waits for a message to be found. Returns as soon as a message matching the specified search criteria is found.
+        timeout: Specify how long to wait for a matching result (in milliseconds, default value is 10 seconds).
+        """
+        self.criteria.body = body
+        message = self.mailosaur.messages.get(
+            self.server_id, self.criteria, timeout=timeout)
+        return message
