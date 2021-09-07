@@ -123,6 +123,5 @@ class keywords(object):
         try:
             assert matcher in html
         except AssertionError as e:
-            logger.error(last_email.html.body)
             raise Exception("AssertionError: '{0}' is not contained in '{1}'".format(
                 matcher, html))
